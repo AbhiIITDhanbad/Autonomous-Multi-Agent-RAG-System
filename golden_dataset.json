@@ -108,7 +108,7 @@
     }
   },
   {
-    "question": "What is the projected global market share of Photonic AI accelerators by 2030 compared to neuromorphic chips?",
+    "question": "Out-of-Domain: What is the projected global market share of Photonic AI accelerators by 2030 compared to neuromorphic chips?",
     "ground_truth": "The provided documents do not contain market share projections for 2030. They only state that photonic AI accelerators are 'pre-mainstream' and neuromorphic chips remain 'largely experimental' and are not general-purpose LLM trainers as of 2024.",
     "contexts": [
       "Photonic AI accelerators are considered promising but pre-mainstream as of 2024.",
