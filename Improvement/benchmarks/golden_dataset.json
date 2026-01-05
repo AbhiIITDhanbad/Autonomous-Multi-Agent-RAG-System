@@ -1,0 +1,122 @@
+[
+  {
+    "question": "Compare the RAG adoption velocity and primary strategic drivers for Microsoft and Salesforce between Q1 2023 and Q1 2024. Who reached peak mention volume first?",
+    "ground_truth": "Microsoft demonstrated higher velocity, starting with 2 mentions in Q1 2023 and peaking at 22 in Q1 2024, driven by Microsoft 365 Copilot and Fabric. Salesforce started later in Q2 2023 (3 mentions) and reached 16 by Q1 2024, driven by Einstein GPT and Data Cloud. Microsoft reached peak volume first.",
+    "contexts": [
+      "Microsoft RAG mentions: Q1 2023 (2), Q2 2023 (5), Q3 2023 (12), Q4 2023 (18), Q1 2024 (22). Salesforce RAG mentions: Q1 2023 (0), Q2 2023 (3), Q3 2023 (9), Q4 2023 (14), Q1 2024 (16).",
+      "Microsoft drivers included Azure OpenAI Service expansion and Microsoft Fabric. Salesforce drivers included Einstein GPT GA and Data Cloud integration."
+    ],
+    "metadata": {
+      "difficulty": "high",
+      "focus": "comparative_velocity"
+    }
+  },
+  {
+    "question": "Evaluate the competitive threat Salesforce’s AI strategy poses to HubSpot based on platform architecture and investment capacity.",
+    "ground_truth": "Salesforce poses a significant threat through platform depth (Data Cloud) and a $500M AI venture fund. HubSpot remains largely feature-level, reliant on third-party integrations, and lacks a unified enterprise data foundation comparable to Salesforce, creating enterprise displacement risk.",
+    "contexts": [
+      "Salesforce integrated Einstein GPT across Customer 360 with Data Cloud as the foundation. They announced a $500 million AI venture fund.",
+      "HubSpot AI remained largely feature-level and lacked a unified enterprise data foundation, leading to enterprise displacement risk."
+    ],
+    "metadata": {
+      "difficulty": "critical",
+      "focus": "strategic_synthesis"
+    }
+  },
+  {
+    "question": "Analyze the dispute between Google and IBM regarding 'Quantum Supremacy' and the resulting industry consensus as of 2021.",
+    "ground_truth": "In 2019, Google claimed supremacy with its Sycamore processor task (200s vs 10,000 years). IBM rebutted that optimized classical simulation could take 2.5 days. By 2021, the National Academy of Sciences concluded quantum advantage was demonstrated, but practical quantum supremacy for useful problems was not yet achieved.",
+    "contexts": [
+      "Google published a paper in Nature claiming quantum supremacy in 2019. IBM publicly challenged this, arguing the task could be simulated in 2.5 days.",
+      "A 2021 report by the US National Academy of Sciences concluded quantum computational advantage had been demonstrated, but practical supremacy for useful problems had not been achieved."
+    ],
+    "metadata": {
+      "difficulty": "high",
+      "focus": "conflict_resolution"
+    }
+  },
+  {
+    "question": "Contrast the compute and memory specifications of the NVIDIA H200 and AMD Instinct MI300X. Which is better for long-context LLM workloads?",
+    "ground_truth": "The NVIDIA H200 delivers higher peak compute (~1,979 FP8 TFLOPS) but lower memory bandwidth (~4.8 TB/s). The AMD MI300X delivers slightly lower compute (~1,835 FP8 TFLOPS) but higher memory bandwidth (~5.2 TB/s). The MI300X is superior for long-context windows due to this higher bandwidth.",
+    "contexts": [
+      "NVIDIA H200: ~1,979 TFLOPS (FP8), ~4.8 TB/s memory bandwidth. Available on AWS p5 instances.",
+      "AMD Instinct MI300X: ~1,835 TFLOPS (FP8), ~5.2 TB/s memory bandwidth. Higher bandwidth makes it attractive for long context windows."
+    ],
+    "metadata": {
+      "difficulty": "medium",
+      "focus": "technical_benchmarking"
+    }
+  },
+  {
+    "question": "Explain why the Tesla Dojo D1's performance claims are considered 'partially verified' by industry analysts.",
+    "ground_truth": "Dojo D1 claims (362 TFLOPS FP32) are vendor-reported and lack independent MLPerf verification. Independent analysis estimates real-world performance at ~280 TFLOPS (77% of peak) due to thermal constraints, memory bandwidth limitations, and software immaturity.",
+    "contexts": [
+      "Dojo has not been independently benchmarked by MLPerf Training or Inference. Performance claims remain vendor-reported.",
+      "Independent semiconductor firms estimated effective performance at ~280 TFLOPS FP32, cited as 77% of theoretical peak due to thermal and memory constraints."
+    ],
+    "metadata": {
+      "difficulty": "high",
+      "focus": "fact_verification"
+    }
+  },
+  {
+    "question": "Compare the R&D intensity of Apple, Google, and Microsoft in FY 2023. What does this suggest about their foundational AI research commitment?",
+    "ground_truth": "Google had the highest R&D intensity at 14.4% ($44.3B), followed by Microsoft at 12.8% ($27.2B) and Apple at 7.8% ($29.9B). This suggests Google and Microsoft are prioritizing foundational AI research and cloud infrastructure, while Apple focuses on hardware efficiency and product optimization.",
+    "contexts": [
+      "FY 2023 R&D Intensity: Apple (7.8% of revenue), Google/Alphabet (14.4%), Microsoft (12.8%).",
+      "Google's high share reflects heavy investment in large language models and long-horizon research."
+    ],
+    "metadata": {
+      "difficulty": "medium",
+      "focus": "financial_signaling"
+    }
+  },
+  {
+    "question": "Identify three core technical approaches to improving In-Context Learning (ICL) and the primary lab associated with each.",
+    "ground_truth": "The three approaches are: 1. Demonstration Retrieval (OpenAI) for dynamic example selection; 2. Chain-of-Thought/Reasoning Traces (Google DeepMind) for multi-step reasoning; and 3. Principle-Based/Constitutional Instruction (Anthropic) for high-level alignment.",
+    "contexts": [
+      "Three technical approaches: Demonstration Retrieval (OpenAI), Chain-of-Thought (Google DeepMind), and Constitutional Instruction (Anthropic).",
+      "These methods improve relevance, reasoning, and generalization respectively."
+    ],
+    "metadata": {
+      "difficulty": "medium",
+      "focus": "technical_attribution"
+    }
+  },
+  {
+    "question": "What are the primary differences in the market positioning of Snowflake and Databricks regarding AI data platforms?",
+    "ground_truth": "Snowflake positions itself as 'AI where the data lives' with a data-centric identity focused on unified governance and regulated enterprises. Databricks positions itself as 'AI-first data infrastructure' with an AI-centric identity focused on ML workflows and data science teams.",
+    "contexts": [
+      "Snowflake: Data-centric identity, targets regulated enterprises, 'AI where the data lives'.",
+      "Databricks: AI-centric identity, targets data science teams, 'AI-first data infrastructure'."
+    ],
+    "metadata": {
+      "difficulty": "medium",
+      "focus": "market_positioning"
+    }
+  },
+  {
+    "question": "Synthesize the production challenges of RAG systems and the specific mitigation strategy for 'Stale Embeddings'.",
+    "ground_truth": "Production RAG challenges include retrieval quality failures (chunking, stale embeddings), hallucinations, and scalability/cost. The specific mitigation for stale embeddings is embedding versioning.",
+    "contexts": [
+      "Common retrieval failures include poor chunking strategies and stale embeddings failing to reflect updated documents.",
+      "Mitigation for stale embeddings: Embedding versioning."
+    ],
+    "metadata": {
+      "difficulty": "medium",
+      "focus": "technical_synthesis"
+    }
+  },
+  {
+    "question": "Out-of-Domain: What is the projected global market share of Photonic AI accelerators by 2030 compared to neuromorphic chips?",
+    "ground_truth": "The provided documents do not contain market share projections for 2030. They only state that photonic AI accelerators are 'pre-mainstream' and neuromorphic chips remain 'largely experimental' and are not general-purpose LLM trainers as of 2024.",
+    "contexts": [
+      "Photonic AI accelerators are considered promising but pre-mainstream as of 2024.",
+      "Neuromorphic systems remain largely experimental and are not general-purpose LLM trainers."
+    ],
+    "metadata": {
+      "difficulty": "critical",
+      "focus": "out_of_domain_handling"
+    }
+  }
+]
