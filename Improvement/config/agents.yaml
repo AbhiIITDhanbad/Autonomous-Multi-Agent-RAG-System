@@ -1,0 +1,418 @@
+# config/agents.yaml
+# Configuration for Phase 1 Multi-Agent RAG System
+
+# config/agents.yaml
+# Configuration for Phase 1 Multi-Agent RAG System
+
+# System-wide settings
+system:
+  name: "Multi-Agent RAG System"
+  phase: 1
+  version: "1.0.0"
+  environment: "development"
+  debug_mode: true
+  log_level: "INFO"
+  max_total_timeout: 300  # seconds
+  enable_streaming: true
+
+# LLM Configuration
+llm:
+  default_model: "nemotron-mini:4b"
+  query_analyzer_model: "nemotron-mini:4b"
+  research_model: "nemotron-mini:4b"
+  synthesis_model: "llama3.1:8b"
+  code_execution_model: "llama3.1:8b"
+  fact_check_model: "llama3.1:8b"
+  
+  temperature:
+    default: 0.0
+    creative: 0.3
+    analysis: 0.1
+    synthesis: 0.2
+  
+  ollama_base_url: "http://localhost:11434"
+  ollama_timeout: 300
+
+# Cache Configuration (New)
+cache:
+  redis_url: "redis://localhost:6379"
+  warm_cache_on_startup: false  # Disabled to reduce latency
+  enable_vector_cache: false    # Disabled for simple caching
+  api_ttl: 3600
+  analysis_ttl: 86400
+  similarity_threshold: 0.8
+
+# Fact Verification Configuration (New)
+fact_verification:
+  contradiction_threshold: 0.7
+  min_sources: 2
+
+# Agents Configuration
+agents:
+  # Base agent settings
+  base:
+    timeout_seconds: 300
+    max_retries: 2
+    enable_fallback: true
+    log_executions: true
+    track_metrics: true
+  
+  # Query Analyzer Agent
+  query_analyzer:
+    enabled: true
+    timeout_seconds: 300
+    max_retries: 2
+    temperature: 0.0
+    features:
+      intent_detection: true
+      query_expansion: true
+      task_decomposition: true
+      routing_decision: true
+      entity_extraction: true
+    
+    intents:
+      - research
+      - comparison
+      - analysis
+      - synthesis
+      - time_series
+      - technical_spec
+    
+    routing_options:
+      - parallel
+      - sequential
+      - research_only
+      - retrieval_only
+      - code_execution_only
+    
+    complexity_thresholds:
+      simple: 3
+      moderate: 5
+      complex: 10
+  
+  # Research Agent
+  research_agent:
+    enabled: true
+    timeout_seconds: 120
+    max_retries: 2
+    temperature: 0.1
+    use_mock_research: true
+    
+    parameters:
+      max_findings: 10
+      min_credibility: 0.3
+      max_sources: 5
+      recency_weight: 0.7
+    
+    credibility_weights:
+      academic_journal: 0.95
+      technical_spec: 0.90
+      company_website: 0.85
+      news_article: 0.75
+      industry_report: 0.80
+      blog: 0.50
+      forum: 0.30
+      mock_research: 0.60
+  
+  # Document Retrieval Agent
+  doc_retrieval_agent:
+    enabled: true
+    timeout_seconds: 90
+    max_retries: 2
+    
+    vector_store:
+      type: "chroma"
+      path: "data/vector_db"
+      collection_name: "knowledge_base"
+      similarity_metric: "cosine"
+    
+    embeddings:
+      model: "nomic-embed-text:latest"
+      ollama_base_url: "http://localhost:11434"
+      batch_size: 32
+      dimension: 768
+    
+    hybrid_search:
+      enabled: true
+      bm25_weight: 0.25
+      semantic_weight: 0.75
+      k: 5
+      rerank_threshold: 0.1
+      
+      bm25:
+        k1: 1.5
+        b: 0.75
+        
+      semantic:
+        similarity_threshold: 0.7
+        diversity_penalty: 0.3
+    
+    filtering:
+      enabled: true
+      min_relevance_score: 0.3
+      max_documents: 10
+      deduplication: true
+      metadata_filters:
+        min_date: "2020-01-01"
+        required_fields: ["source", "content_type"]
+        excluded_types: ["personal", "sensitive"]
+  
+  # Synthesis Agent
+  synthesis_agent:
+    enabled: true
+    timeout_seconds: 120
+    max_retries: 2
+    temperature: 0.2
+    
+    parameters:
+      max_answer_length: 2000
+      min_confidence: 0.4
+      include_citations: true
+      include_contradictions: true
+      include_assumptions: true
+      citation_format: "inline"
+      max_citations: 10
+      format_mapping:
+        table: "markdown_table"
+        paragraph: "structured_paragraph"
+        list: "numbered_list"
+        json: "json_object"
+    
+    confidence_weights:
+      research_credibility: 0.4
+      document_relevance: 0.3
+      source_diversity: 0.2
+      answer_specificity: 0.1
+  
+  # Fact Verification Agent
+  fact_verification_agent:
+    enabled: true
+    timeout_seconds: 90
+    max_retries: 1
+    parameters:
+      contradiction_threshold: 0.7
+      min_agreement_sources: 2
+      cross_reference_weight: 0.8
+
+  # Optional Agents (Disabled Phase 1)
+  code_execution_agent:
+    enabled: false
+    timeout_seconds: 180
+    max_retries: 1
+    execution:
+      sandbox: true
+      timeout: 30
+      memory_limit: "256MB"
+      allowed_modules: ["numpy", "pandas", "matplotlib", "datetime", "math", "statistics"]
+      plotting:
+        enabled: true
+        format: "png"
+      analysis:
+        max_rows: 10000
+        max_columns: 50
+  
+  human_in_loop:
+    enabled: false
+    timeout_seconds: 300
+    max_retries: 0
+    simulation:
+      response_delay: 2.0
+      accuracy: 0.85
+      clarification_probability: 0.3
+  
+  error_handler:
+    enabled: true
+    timeout_seconds: 60
+    max_retries: 0
+    strategies:
+      - type: "fallback_answer"
+        priority: 1
+        conditions: ["timeout", "empty_results"]
+      - type: "partial_results"
+        priority: 2
+        conditions: ["partial_success"]
+      - type: "simplify_query"
+        priority: 3
+        conditions: ["complex_query_failure"]
+      - type: "retry_different_approach"
+        priority: 4
+        conditions: ["retrieval_failure"]
+    fallback_templates:
+      timeout: "The query took too long to process. Please try a simpler query."
+      no_information: "I couldn't find sufficient information to answer your query."
+      system_error: "There was an error processing your query."
+
+# Workflow Configuration
+workflow:
+  use_langgraph: true
+  checkpointing: true
+  checkpoint_path: "data/checkpoints"
+  max_workflow_steps: 20
+  
+  parallel:
+    enabled: true
+    max_workers: 3
+    timeout: 180
+    
+  routing:
+    confidence_thresholds:
+      high_confidence: 0.8
+      medium_confidence: 0.6
+      low_confidence: 0.4
+    decisions:
+      high_confidence: "synthesis_agent"
+      medium_confidence: "synthesis_agent"
+      low_confidence: "error_handler"
+      contradictions_detected: "human_in_loop"
+      
+  streaming:
+    enabled: true
+    event_types: ["agent_start", "agent_progress", "agent_complete", "answer_chunk", "error", "complete"]
+    chunk_size: 100
+    delay_between_chunks: 0.05
+
+# Retrieval Configuration
+retrieval:
+  k: 5
+  max_tokens_per_document: 2000
+  hybrid_weights:
+    bm25: 0.25
+    semantic: 0.75
+    recency: 0.0
+  chunking:
+    chunk_size: 1000
+    chunk_overlap: 200
+    separators: ["\n\n", "\n", " ", ""]
+  metadata:
+    extract_fields: ["source", "date", "author", "content_type", "relevance_score"]
+  cache:
+    enabled: true
+    ttl: 3600
+    max_size: 1000
+
+# API Configuration
+api:
+  fastapi:
+    host: "0.0.0.0"
+    port: 8000
+    workers: 1
+    reload: true
+  cors:
+    allow_origins: ["*"]
+    allow_credentials: true
+    allow_methods: ["*"]
+    allow_headers: ["*"]
+  rate_limit:
+    enabled: false
+    requests_per_minute: 60
+    burst_limit: 10
+  auth:
+    enabled: false
+    api_key_header: "X-API-Key"
+  endpoints:
+    query: "/query"
+    stream: "/stream"
+    health: "/health"
+    info: "/info"
+    test: "/test/{test_id}"
+
+# Evaluation Configuration
+evaluation:
+  golden_queries:
+    path: "data/golden_queries.json"
+    test_on_startup: true
+    num_test_queries: 5
+  metrics:
+    - faithfulness
+    - answer_relevance
+    - context_recall
+    - latency
+    - success_rate
+  thresholds:
+    faithfulness: 0.80
+    answer_relevance: 0.85
+    context_recall: 0.70
+    latency_seconds: 60
+    success_rate: 0.90
+  ragas:
+    enabled: false
+    metrics_providers: ["openai", "azure"]
+
+# Logging Configuration
+logging:
+  levels:
+    root: "INFO"
+    agents: "DEBUG"
+    workflow: "INFO"
+    api: "INFO"
+    retrieval: "DEBUG"
+  handlers:
+    console:
+      enabled: true
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    file:
+      enabled: true
+      path: "logs/system.log"
+      max_size: "10MB"
+      backup_count: 5
+  structured:
+    enabled: true
+    include_fields: ["agent_name", "execution_time", "success", "error_type", "query_hash"]
+
+# Performance Monitoring
+monitoring:
+  enabled: true
+  latency:
+    track_per_agent: true
+    warning_threshold: 30
+    critical_threshold: 60
+  tokens:
+    track_usage: true
+    warning_threshold: 10000
+    critical_threshold: 50000
+  memory:
+    track_usage: true
+    warning_threshold_mb: 512
+    critical_threshold_mb: 1024
+
+# Phase 1 Specific Settings
+phase1:
+  use_mock_data: true
+  enable_all_agents: false
+  
+  core_agents:
+    - query_analyzer
+    - research_agent
+    - doc_retrieval_agent
+    - fact_verification_agent
+    - synthesis_agent
+    
+  optional_agents:
+    - code_execution_agent
+    - human_in_loop
+    
+  success_criteria:
+    working_graph: true
+    process_golden_queries: true
+    streaming_demo: true
+    faithfulness_score: 0.80
+    
+  risk_mitigation:
+    state_bloat: "lazy_evaluation"
+    agent_collision: "clear_ownership_rules"
+    latency_explosion: "30s_timeout_per_agent"
+    prompt_engineering: "iterative_refinement"
+
+# External Services
+external_services:
+  tavily_api_key: "${TAVILY_API_KEY}"
+  serper_api_key: "${SERP_API_KEY}"
+  openai_api_key: "${OPENAI_API_KEY}"
+  azure_openai_endpoint: "${AZURE_OPENAI_ENDPOINT}"
+  
+  web_search:
+    enabled: false
+    max_results: 10
+    time_range: "month"
+    include_domains: []
+    exclude_domains: ["twitter.com", "reddit.com"]
